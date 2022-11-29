@@ -49,9 +49,7 @@ const ChatProvider = ({ children }) => {
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
     setUser(userInfo);
-
     if (!userInfo) history.push("/");
 
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((currentStream) => {
@@ -137,7 +135,7 @@ const ChatProvider = ({ children }) => {
         callData
       });
     });
-    console.log("calldata -",callData)
+    console.log("calldata -", callData)
     // peer.on("stream", (currentStream) => {
     //   userVideo.current.srcObject = currentStream;
     // });
