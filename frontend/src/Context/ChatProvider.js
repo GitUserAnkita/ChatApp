@@ -46,7 +46,6 @@ const ChatProvider = ({ children }) => {
   const userVideo = useRef();
   const connectionRef = useRef();
 
-
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     setUser(userInfo);
@@ -81,7 +80,6 @@ const ChatProvider = ({ children }) => {
           case "mic":
             // setUserMicStatus(currentMediaStatus);
             setUserMicStatus(true);
-
             break;
           default:
             setUserMicStatus(currentMediaStatus[0]);
@@ -102,8 +100,9 @@ const ChatProvider = ({ children }) => {
       }, 1000);
     });
   }, [history]);
+  console.log("kgjjgkfgfkjgkjk",call)
 
-  //  ------------------------------------- callUser Function -------------------------------------------------
+  //  ------------------------------------- callUser Function -----------------------------------------------------------
 
   const callUser = async (id) => {
     sId = localStorage.getItem('socketId')
@@ -171,7 +170,6 @@ const ChatProvider = ({ children }) => {
           var base64String = fileReader.result;
           socket.emit("voice", base64String);
           // socket.emit("voice", { base64String, selectedChat, loginUserId, data });
-
         };
         madiaRecorder.start();
         setTimeout(function () {
@@ -189,11 +187,11 @@ const ChatProvider = ({ children }) => {
     });
     emitUserInformation()
   };
-  //  ------------------------------------- answerCallFunction -------------------------------------------------
+  //  ------------------------------------- answerCallFunction ---------------------------------------------------------
   const answerCall = async () => {
     setCallAccepted(true);
     setOtherUser(call.from);
-    const peer = new Peer({ initiator: false, trickle: false, stream });
+    // const peer = new Peer({ initiator: false, trickle: false, stream });
     // peer.on("signal", (data) => {
     //   socket.emit("answerCall", {
     //     signal: data,
@@ -210,10 +208,6 @@ const ChatProvider = ({ children }) => {
     // peer.signal(call.signal);
     // connectionRef.current = peer;
     // console.log(connectionRef.current);
-
-
-
-
 
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
       var madiaRecorder = new MediaRecorder(stream);
@@ -254,12 +248,12 @@ const ChatProvider = ({ children }) => {
     emitUserInformation()
 
   };
-  //  ------------------------------------- emitUserInformation Function -------------------------------------------------
+  //  ------------------------------------- emitUserInformation Function -----------------------------------------------
 
   const emitUserInformation = () => {
     socket.emit("userInformation", userStatus);
   }
-  //  ------------------------------------- updateVideo Function -------------------------------------------------
+  //  ------------------------------------- updateVideo Function --------------------------------------------------------
 
   const updateVideo = () => {
     setMyVdoStatus((currentStatus) => {
@@ -271,7 +265,7 @@ const ChatProvider = ({ children }) => {
       return !currentStatus;
     });
   };
-  //  ------------------------------------- updateMic Function -------------------------------------------------
+  //  ------------------------------------- updateMic Function ---------------------------------------------------------
 
   const updateMic = () => {
     setMyMicStatus((currentStatus) => {
@@ -283,7 +277,7 @@ const ChatProvider = ({ children }) => {
       return !currentStatus;
     });
   };
-  //  ------------------------------------- leaveCall Function -------------------------------------------------
+  //  ------------------------------------- leaveCall Function ---------------------------------------------------------
   const leaveCall = () => {
     setCallEnded(true);
 
@@ -291,11 +285,11 @@ const ChatProvider = ({ children }) => {
     socket.emit("endCall", { id: otherUser });
     window.location.reload();
   };
-  //  ------------------------------------- leaveCall1 Function -------------------------------------------------
+  //  ------------------------------------- leaveCall1 Function --------------------------------------------------------
   const leaveCall1 = () => {
     socket.emit("endCall", { id: otherUser });
   };
-  //  ------------------------------------- sendMsg Function -------------------------------------------------
+  //  ------------------------------------- sendMsg Function ------------------------------------------------------------
   const sendMsg = (value) => {
     socket.emit("msgUser", { name, to: otherUser, msg: value, sender: name });
     let msg = {};

@@ -3,7 +3,6 @@ import { Input, Tooltip, message } from "antd";
 import Phone from "../../assets/phone.gif";
 import Teams from "../../assets/teams.mp3";
 import * as classes from "./OptionsModule.css";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 import { ChatState } from "../../Context/ChatProvider";
 import Hang from "../../assets/hang.png";
 
@@ -26,38 +25,36 @@ const Options = () => {
   useEffect(() => {
     if (isModalVisible) {
       Audio1?.current?.play();
-      // audio.play();
-    } else{
-      audio.pause();
-       Audio1?.current?.pause()
-      };
+    } else {
+      Audio1?.current?.pause()
+    };
 
     sId = localStorage.getItem('socketId')
   }, [isModalVisible]);
 
   const showModal = (showVal) => {
-    console.log("showVal ===", showVal)
     setIsModalVisible(showVal);
   };
 
   const handleCancel = () => {
-    // audio.pause()
     setIsModalVisible(false);
     leaveCall1();
     window.location.reload();
   };
 
   useEffect(() => {
+    console.log("callAccepted =",callAccepted)
     if (call.isReceivingCall && !callAccepted) {
       setIsModalVisible(true);
       setOtherUser(call.from);
-    } else setIsModalVisible(false);
+    } else {
+      setIsModalVisible(false)
+    };
   }, [call.isReceivingCall]);
 
   return (
     <>
       <div className={classes.options}>
-        {console.log("callAccepted ",callAccepted,"callEnded =",callEnded)}
         <div style={{ marginBottom: "0.5rem" }}>
           {callAccepted && !callEnded ? (
             <Button
@@ -70,16 +67,16 @@ const Options = () => {
             </Button>
           ) : (
             <>
-              <NotificationBadge count={callNotification.length} effect={Effect.SCALE} />
+              {/* <NotificationBadge count={callNotification.length} effect={Effect.SCALE} /> */}
               <IconButton d={{ base: "flex" }} icon={<PhoneIcon />} onClick={() => callUser(me)} className={classes.btn} />
-              {console.log("notification length ",callNotification.length)}
               {callNotification.length === 0 ? ""
-                : <>
+                :
+                 <>
                       <audio src={Teams} loop ref={Audio1} />
                       <Modal isOpen={() => showModal(false)} onClose={handleCancel}>
                         <ModalOverlay />
                         <ModalContent>
-                          <ModalHeader>Incomming Call.....</ModalHeader>
+                          <ModalHeader> {call.name} is calling you:{" "}</ModalHeader>
                           <ModalBody>
                             <div style={{ display: "flex", justifyContent: "space-around" }}>
                               <img
@@ -90,7 +87,7 @@ const Options = () => {
                               />
                             </div>
                           </ModalBody>
-                          <Center>  
+                          <Center>
                             <ModalFooter>
                               <div className={classes.btnDiv}>
                                 <Button
@@ -98,7 +95,6 @@ const Options = () => {
                                   colorScheme='green'
                                   icon={<PhoneOutlined />}
                                   onClick={() => {
-                                    audio.pause();
                                     answerCall();
                                     Audio1.current.pause();
                                   }}
@@ -110,7 +106,7 @@ const Options = () => {
                                 <Button
                                   colorScheme='red'
                                   className={classes.decline}
-                                  onClick={() => {  audio.pause();handleCancel(); setIsModalVisible(false); Audio1.current.pause(); }}
+                                  onClick={() => { handleCancel(); setIsModalVisible(false); Audio1.current.pause(); }}
                                   onClose={onClose}
                                   tabIndex="0"
                                 >
@@ -122,7 +118,8 @@ const Options = () => {
                         </ModalContent>
                       </Modal>
                     </>
-                }
+  
+              }
             </>
           )}
         </div>
