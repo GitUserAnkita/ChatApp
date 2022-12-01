@@ -71,7 +71,6 @@ io.on("connection", (socket) => {
   socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
 
   socket.on("new message", (newMessageRecieved) => {
-    console.log("=================", newMessageRecieved)
     var chat = newMessageRecieved.chat;
     if (!chat.users) return console.log("chat.users not defined");
     chat.users.forEach((user) => {
@@ -154,6 +153,7 @@ io.on("connection", (socket) => {
 
   // -------voice call --------------------------------------
   socket.on("voice", function (data) {
+    console.log("------------",data)
     var newData = data.split(";");
     // var newData = data.base64String.split(";");
     newData[0] = "data:audio/ogg;";
